@@ -1,32 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
 
-@import url(
-  https://fonts.google.com/share?selection.family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900|Lora:ital,wght@0,400..700;1,400..700|Playfair+Display:ital,wght@0,400..900;1,400..900
-);
-
-*{
-  margin:0;
+* {
+  margin: 0;
   padding: 0;
   box-sizing: border-box;
-  outline:none;
-  text-decoration:none ;
+  outline: none;
+  text-decoration: none;
 }
-html{
-font-size:62.5% ;
 
+html {
+  font-size: 62.5%;
+  font-family: 'Inter', sans-serif;
 }
-.container{
+
+.container {
   width: 100%;
-  height:100vh;
-  background-color: linear-gradient(to right,#b88efc,6877f4);
-  display:grid;
+  height: 100vh;
+  background: linear-gradient(to right, #b88efc, #6877f4);
+  display: grid;
   place-items: center;
-
 }
-.news-blog-app{
-  width:95vw;
-  height:95vmin;
-  background-color: #060709;
-  box-shadow: 0 2rem 3rem rgba(0,0,0,0.5);
-  border-radius: 1rem;
 
+.news-blog-app {
+  width: 95vw;
+  height: 95vmin;
+  background-color: #060709;
+  box-shadow: 0 2rem 3rem rgba(0, 0, 0, 0.5);
+  border-radius: 1rem;
+  color: white;
+  font-family: 'Lora', serif;
 }

@@ -1,12 +1,14 @@
- import React from "react";
+import React from "react";
+import News from "./components/News";
 
- const App = ()=>{
-  return 
-  <div className="container">
-    <div className="news-blog-app">
-      <New/>
+const App = () => {
+  return (
+    <div className="container">
+      <div className="news-blog-app">
+        <News />
+      </div>
     </div>
-    app
-  </div>
- }
- export default App;
+  );
+};
+
+export default App;
