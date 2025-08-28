@@ -18,9 +18,16 @@
     border-radius: 1rem 1rem 0 0;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-between;
     padding-left: 2rem;
     flex-shrink: 0;
+    padding: 0 4rem;
+}
+.logo{
+    font-family: 'Bebas Neus',sans-serif;
+    font-size: 5rem;
+    color: #ddd;
+    letter-spacing: 0.2rem;
 }
 
 /* News content (main middle section) */

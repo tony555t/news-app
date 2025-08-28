@@ -7,12 +7,12 @@ const News = () => {
       <header className="news-header">
         <h1 className="logo">News & BlOGS</h1>
         <div className="search-bar">
-          <Form>
-            <input type="text" placeholder="Search News..." />
-            <button type="submit">
-              <i className="fa-solid fa-magnifying-glass"></i>
-            </button>
-          </Form>
+         <form>
+  <input type="text" placeholder="Search News..." />
+  <button type="submit">
+    <i className="fa-solid fa-magnifying-glass"></i>
+  </button>
+</form>
         </div>
       </header>
       
