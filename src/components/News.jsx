@@ -31,12 +31,12 @@ const News = () => {
                         <a href="#" class="nav-link"><i class="fa-solid fa-earth-americas"></i> World</a>
                         <a href="#" class="nav-link"><i class="fa-solid fa-chart-line"></i> Business</a>
                         <a href="#" class="nav-link"><i class="fa-solid fa-microchip"></i> Technology</a>
-                        <a href="#" class="nav-link"><i class="fa-solid fa-film"></i> Entertainment</a>
+                        <a href="#" class="nav-link"><i class="fa-solid fa-film"></i> Entertain</a>
                         <a href="#" class="nav-link"><i class="fa-solid fa-basketball"></i> Sport</a>
                         <a href="#" class="nav-link"><i class="fa-solid fa-flask"></i> Science</a>
                         <a href="#" class="nav-link"><i class="fa-solid fa-heart-pulse"></i> Health</a>
                         <a href="#" class="nav-link"><i class="fa-solid fa-flag"></i> Nation</a>
-                         <a href="#" class="nav-link"><i class="fa-solid fa-flag"></i> Bookmark</a>
+                        <a href="#" class="nav-link"><i class="fa-solid fa-bookmark"></i> Bookmark</a>
 
                     </div>
                    
@@ -121,7 +121,7 @@ const News = () => {
       </div>
 
       <footer className="news-footer">
-        <p>© 2024 <span>News & Blogs</span> Platform</p>
+        <p>© 2025 <span>News & Blogs</span> Platform</p>
         <p>Stay Connected & Informed</p>
       </footer>
     </div>

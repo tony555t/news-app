@@ -442,6 +442,11 @@
 
   .nav-link {
     margin-right: 2rem;
+    font-size:0.875rem;
+    font-weight:300;
+    color:#ddd;
+    text-transform: uppercase;
+    letter-spacing: 0.1rem;
   }
 
   .news-section {
