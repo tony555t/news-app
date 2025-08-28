@@ -4,7 +4,17 @@ import './News.css';
 const News = () => {
   return (
     <div className="news">
-      <header className="news-header">News Header</header>
+      <header className="news-header">
+        <h1 className="logo">News & BlOGS</h1>
+        <div className="search-bar">
+          <Form>
+            <input type="text" placeholder="Search News..." />
+            <button type="submit">
+              <i className="fa-solid fa-magnifying-glass"></i>
+            </button>
+          </Form>
+        </div>
+      </header>
       
       <div className="news-content">
         <div className="navbar">
