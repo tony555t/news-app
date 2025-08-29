@@ -9,39 +9,114 @@ const News = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const apiKey = "b8a8d6918f0d2d580ad338bf7409299a";
-        const url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en&country=us&max=10`;
-
-        const { data } = await axios.get(url);
-
-        console.log("GNews API Response:", data);
-
-        if (data && data.articles && data.articles.length > 0) {
-          console.log("Total articles fetched:", data.articles.length);
-          
-          // GNews returns articles in a different format
-          const formattedArticles = data.articles.map(article => ({
-            title: article.title,
-            image_url: article.image,
-            description: article.description,
-            url: article.url,
-            source: article.source.name,
-            publishedAt: article.publishedAt
-          }));
-          
-          setHeadline(formattedArticles[0].title);
-          setNews(formattedArticles);
-          console.log("Articles for grid:", formattedArticles.slice(1));
-        }
-      } catch (error) {
-        console.error("Error fetching news:", error);
-        console.error("Error details:", error.response?.data);
-      } finally {
-        setLoading(false);
-      }
+   
+const fetchNews = async (category = 'general') => {
+  setLoading(true);
+  try {
+    const apiKey = "b8a8d6918f0d2d580ad338bf7409299a";
+    
+    // Complete category mapping for GNews API
+    const categoryMapping = {
+      'general': 'general',
+      'world': 'world', 
+      'business': 'business',
+      'technology': 'technology',
+      'leisure': 'entertainment',
+      'sport': 'sports',
+      'science': 'science',
+      'health': 'health',
+      'nation': 'nation'
     };
+
+    // Map the display category to API category
+    const apiCategory = categoryMapping[category];
+    
+    let url;
+    
+    if (!apiCategory) {
+      // For categories not supported by API (like bookmark), use general
+      url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en&country=us&max=10`;
+    } else if (apiCategory === 'general') {
+      // For general category, don't specify category parameter
+      url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en&country=us&max=10`;
+    } else {
+      // For specific categories
+      url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en&country=us&category=${apiCategory}&max=10`;
+    }
+
+    console.log(`Fetching ${category} news from URL:`, url);
+
+    const { data } = await axios.get(url);
+
+    if (data && data.articles && data.articles.length > 0) {
+      const formattedArticles = data.articles.map(article => ({
+        title: article.title,
+        image_url: article.image,
+        description: article.description,
+        url: article.url,
+        source: article.source.name,
+        publishedAt: article.publishedAt
+      }));
+      
+      setHeadline(formattedArticles[0].title);
+      setNews(formattedArticles);
+    } else {
+      // If no articles found, try alternative approach
+      console.log(`No ${category} articles found, trying search approach...`);
+      
+      // Alternative: Use search API for categories that might not work with top-headlines
+      const searchUrl = `https://gnews.io/api/v4/search?token=${apiKey}&q=${category}&lang=en&country=us&max=10`;
+      
+      const searchResponse = await axios.get(searchUrl);
+      
+      if (searchResponse.data && searchResponse.data.articles && searchResponse.data.articles.length > 0) {
+        const formattedArticles = searchResponse.data.articles.map(article => ({
+          title: article.title,
+          image_url: article.image,
+          description: article.description,
+          url: article.url,
+          source: article.source.name,
+          publishedAt: article.publishedAt
+        }));
+        
+        setHeadline(formattedArticles[0].title);
+        setNews(formattedArticles);
+      } else {
+        setNews([]);
+      }
+    }
+  } catch (error) {
+    console.error(`Error fetching ${category} news:`, error);
+    
+    // If category-specific request fails, try search as fallback
+    try {
+      console.log(`Trying search fallback for ${category}...`);
+      const fallbackUrl = `https://gnews.io/api/v4/search?token=${apiKey}&q=${category}&lang=en&max=10`;
+      const fallbackResponse = await axios.get(fallbackUrl);
+      
+      if (fallbackResponse.data && fallbackResponse.data.articles && fallbackResponse.data.articles.length > 0) {
+        const formattedArticles = fallbackResponse.data.articles.map(article => ({
+          title: article.title,
+          image_url: article.image,
+          description: article.description,
+          url: article.url,
+          source: article.source.name,
+          publishedAt: article.publishedAt
+        }));
+        
+        setHeadline(formattedArticles[0].title);
+        setNews(formattedArticles);
+      } else {
+        setNews([]);
+      }
+    } catch (fallbackError) {
+      console.error(`Fallback search also failed for ${category}:`, fallbackError);
+      setNews([]);
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
     fetchNews();
   }, []);
@@ -131,7 +206,7 @@ const News = () => {
 
           {/* News Grid  */}
           <div className="news-grid">
-            {news.slice(1).map((item, index) => {
+            {news.slice(1,10).map((item, index) => {
               console.log(`Rendering grid item ${index}:`, item);
               return (
                 <div className="news-grid-item" key={index}>

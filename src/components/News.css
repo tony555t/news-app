@@ -209,7 +209,7 @@
   opacity: 0.4;
 }
 
-/* Main news grid - fixed to handle more than 6 items */
+/* Main news grid  */
 .news-grid {
   width: 100%;
   height: 50%;
@@ -222,10 +222,9 @@
   padding: 1.2rem;
   justify-content: center;
   align-items: center;
-  overflow-y: auto; /* Enable scrolling for more than 6 items */
+  overflow-y: auto; 
 }
 
-/* Hide scrollbar but keep functionality */
 .news-grid::-webkit-scrollbar {
   display: none;
 }
@@ -383,7 +382,7 @@
     overflow: hidden;
   }
 
-  /* Keep 3x2 grid but enable auto-rows for overflow */
+
   .news-grid {
     grid-template-columns: repeat(3, 1fr);
     grid-auto-rows: 1fr;
