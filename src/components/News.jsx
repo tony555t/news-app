@@ -1,13 +1,6 @@
 import React from "react";
 import './News.css';
 import userImg from '../assets/images/user.jpg';
-import techImg from '../assets/images/tech.jpg';
-import sportsImg from '../assets/images/sports.jpg';
-import worldImg from '../assets/images/world.jpg';
-import scienceImg from '../assets/images/science.jpg';
-import nationImg from '../assets/images/nation.jpg';
-import healthImg from '../assets/images/health.jpg';
-
 
 const News = () => {
   return (
@@ -31,65 +24,78 @@ const News = () => {
             <p>Mary's Blog</p>
           </div>
 
-           <nav class="categories">
-                    <h1 class="nav-heading">Categories</h1>
-                    <div class="nav-links">
-                        <a href="#" class="nav-link"><i class="fa-solid fa-globe"></i> General</a>
-                        <a href="#" class="nav-link"><i class="fa-solid fa-earth-americas"></i> World</a>
-                        <a href="#" class="nav-link"><i class="fa-solid fa-chart-line"></i> Business</a>
-                        <a href="#" class="nav-link"><i class="fa-solid fa-microchip"></i> Technology</a>
-                        <a href="#" class="nav-link"><i class="fa-solid fa-film"></i>leisure</a>
-                        <a href="#" class="nav-link"><i class="fa-solid fa-basketball"></i> Sport</a>
-                        <a href="#" class="nav-link"><i class="fa-solid fa-flask"></i> Science</a>
-                        <a href="#" class="nav-link"><i class="fa-solid fa-heart-pulse"></i> Health</a>
-                        <a href="#" class="nav-link"><i class="fa-solid fa-flag"></i> Nation</a>
-                        <a href="#" class="nav-link"><i class="fa-solid fa-bookmark"></i> Bookmark</a>
-
-                    </div>
-                   
-                </nav>
-
-       
+          <nav className="categories">
+            <h1 className="nav-heading">Categories</h1>
+            <div className="nav-links">
+              <a href="#" className="nav-link"><i className="fa-solid fa-globe"></i> General</a>
+              <a href="#" className="nav-link"><i className="fa-solid fa-earth-americas"></i> World</a>
+              <a href="#" className="nav-link"><i className="fa-solid fa-chart-line"></i> Business</a>
+              <a href="#" className="nav-link"><i className="fa-solid fa-microchip"></i> Technology</a>
+              <a href="#" className="nav-link"><i className="fa-solid fa-film"></i> Leisure</a>
+              <a href="#" className="nav-link"><i className="fa-solid fa-basketball"></i> Sport</a>
+              <a href="#" className="nav-link"><i className="fa-solid fa-flask"></i> Science</a>
+              <a href="#" className="nav-link"><i className="fa-solid fa-heart-pulse"></i> Health</a>
+              <a href="#" className="nav-link"><i className="fa-solid fa-flag"></i> Nation</a>
+              <a href="#" className="nav-link"><i className="fa-solid fa-bookmark"></i> Bookmark</a>
+            </div>
+          </nav>
         </div>
 
         <main className="news-section">
           <div className="headline">
-            <img src={techImg} alt="headline image " />
-            <h2 className="headline-title">
-              Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
-              Repellat ratione ullam similique beatae eos quasi quam hic id.
-              <i className="fa-regular fa-bookmark bookmark"></i>
-
-            </h2>
-            <img src="{ nationImg}" alt="" />
+            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800" alt="Headline" />
             <h2 className="headline-title">Breaking: Major News Event Happening Now</h2>
             <div className="bookmark">
               <i className="fa-regular fa-bookmark"></i>
             </div>
           </div>
+          
           <div className="news-grid">
             <div className="news-grid-item">
-              <img src="{sportsImg}" alt="" />
+              <img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?w=400" alt="News" />
+              <div className="bookmark-icon">
+                <i className="far fa-bookmark"></i>
+              </div>
               <h3>Technology Update</h3>
             </div>
-            {/* <div className="news-grid-item">
-              <img src={businessImg} alt="News" />
-              <h3>Business News</h3>
-            </div> */}
+            
             <div className="news-grid-item">
-              <img src={sportsImg} alt="News" />
+              <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400" alt="News" />
+              <div className="bookmark-icon">
+                <i className="far fa-bookmark"></i>
+              </div>
+              <h3>Business News</h3>
+            </div>
+            
+            <div className="news-grid-item">
+              <img src="https://images.unsplash.com/photo-1546198632-9ef6368bef12?w=400" alt="News" />
+              <div className="bookmark-icon">
+                <i className="far fa-bookmark"></i>
+              </div>
               <h3>Sports Update</h3>
             </div>
+            
             <div className="news-grid-item">
-              <img src={healthImg} alt="News" />
+              <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=400" alt="News" />
+              <div className="bookmark-icon">
+                <i className="far fa-bookmark"></i>
+              </div>
               <h3>Health News</h3>
             </div>
+            
             <div className="news-grid-item">
-              <img src={scienceImg} alt="News" />
+              <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400" alt="News" />
+              <div className="bookmark-icon">
+                <i className="far fa-bookmark"></i>
+              </div>
               <h3>Science Discovery</h3>
             </div>
+            
             <div className="news-grid-item">
-              <img src={worldImg} alt="News" />
+              <img src="https://images.unsplash.com/photo-1444653389962-8149286c578a?w=400" alt="News" />
+              <div className="bookmark-icon">
+                <i className="far fa-bookmark"></i>
+              </div>
               <h3>World Events</h3>
             </div>
           </div>
@@ -106,6 +112,7 @@ const News = () => {
                 <button><i className="fa-solid fa-trash"></i></button>
               </div>
             </article>
+            
             <article className="blog-post">
               <img src="https://images.unsplash.com/photo-1486312338219-ce68e2c6b7dd?w=400" alt="Blog Post" />
               <h3>Tech Review</h3>
@@ -114,6 +121,7 @@ const News = () => {
                 <button><i className="fa-solid fa-trash"></i></button>
               </div>
             </article>
+            
             <article className="blog-post">
               <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400" alt="Blog Post" />
               <h3>Travel Stories</h3>
@@ -122,6 +130,7 @@ const News = () => {
                 <button><i className="fa-solid fa-trash"></i></button>
               </div>
             </article>
+            
             <article className="blog-post">
               <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400" alt="Blog Post" />
               <h3>Food Adventures</h3>
