@@ -173,27 +173,7 @@
   border-radius: 0 0 1rem 1rem;
 }
 
-/* .bookmark {
-  position: absolute;
-  top: 1.5rem;
-  right: 1.5rem;
-  cursor: pointer;
-  z-index: 30;
-  color: #fff;
-  font-size: 2.4rem;
-  padding: 1rem;
-  background-color: rgba(0, 0, 0, 0.8);
-  border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-}
-
-.bookmark:hover {
-  background-color: rgba(0, 0, 0, 0.8);
-  transform: scale(1.1);
-  transition: all 0.3s ease;
-} */
- /* Bookmark icon for news grid items */
+/* Bookmark icon for news grid items */
 .bookmark-icon {
   position: absolute;
   top: 1rem;
@@ -229,6 +209,7 @@
   opacity: 0.4;
 }
 
+/* Main news grid - fixed to handle more than 6 items */
 .news-grid {
   width: 100%;
   height: 50%;
@@ -241,8 +222,15 @@
   padding: 1.2rem;
   justify-content: center;
   align-items: center;
+  overflow-y: auto; /* Enable scrolling for more than 6 items */
 }
 
+/* Hide scrollbar but keep functionality */
+.news-grid::-webkit-scrollbar {
+  display: none;
+}
+
+/* Ensure grid items maintain proper sizing */
 .news-grid-item {
   width: 100%;
   height: 100%;
@@ -385,6 +373,7 @@
   font-size: 2rem;
 }
 
+/* Media query fixes */
 @media (max-width: 1400px) {
   .nav-links {
     row-gap: 1rem;
@@ -394,14 +383,11 @@
     overflow: hidden;
   }
 
+  /* Keep 3x2 grid but enable auto-rows for overflow */
   .news-grid {
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    overflow-y: scroll;
-  }
-
-  .news-grid::-webkit-scrollbar {
-    display: none;
+    grid-template-columns: repeat(3, 1fr);
+    grid-auto-rows: 1fr;
+    overflow-y: auto;
   }
 
   .blog-posts {
@@ -419,8 +405,9 @@
 
 @media (max-width: 1024px) {
   .news-grid {
-    grid-template-columns: repeat(1, 1fr);
-    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 1fr;
+    overflow-y: auto;
   }
 }
 
@@ -448,10 +435,6 @@
     height: 18rem;
   }
 
-  
- 
-  
-
   .categories {
     width: 70%;
     height: 100%;
@@ -468,9 +451,9 @@
 
   .nav-link {
     margin-right: 2rem;
-    font-size:0.875rem;
-    font-weight:300;
-    color:#ddd;
+    font-size: 0.875rem;
+    font-weight: 300;
+    color: #ddd;
     text-transform: uppercase;
     letter-spacing: 0.1rem;
   }
@@ -481,7 +464,8 @@
 
   .news-grid {
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(2, 1fr);
+    grid-auto-rows: 1fr;
+    overflow-y: auto;
   }
 
   .my-blogs {
@@ -540,7 +524,8 @@
 
   .news-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
+    grid-auto-rows: 1fr;
+    overflow-y: auto;
   }
 
   .weather-calendar {
