@@ -421,10 +421,9 @@
     height: 18rem;
   }
 
-  .user {
-    width: calc(30% - 2rem);
-    height: 100%;
-  }
+  
+ 
+  
 
   .categories {
     width: 70%;

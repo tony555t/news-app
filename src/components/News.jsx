@@ -1,6 +1,13 @@
 import React from "react";
 import './News.css';
 import userImg from '../assets/images/user.jpg';
+import techImg from '../assets/images/tech.jpg';
+import sportsImg from '../assets/images/sports.jpg';
+import worldImg from '../assets/images/world.jpg';
+import scienceImg from '../assets/images/science.jpg';
+import nationImg from '../assets/images/nation.jpg';
+import healthImg from '../assets/images/health.jpg';
+
 
 const News = () => {
   return (
@@ -14,7 +21,7 @@ const News = () => {
               <i className="fa-solid fa-magnifying-glass"></i>
             </button>
           </form>
-        </div>
+        </div> 
       </header>
 
       <div className="news-content">
@@ -31,7 +38,7 @@ const News = () => {
                         <a href="#" class="nav-link"><i class="fa-solid fa-earth-americas"></i> World</a>
                         <a href="#" class="nav-link"><i class="fa-solid fa-chart-line"></i> Business</a>
                         <a href="#" class="nav-link"><i class="fa-solid fa-microchip"></i> Technology</a>
-                        <a href="#" class="nav-link"><i class="fa-solid fa-film"></i> Entertain</a>
+                        <a href="#" class="nav-link"><i class="fa-solid fa-film"></i>leisure</a>
                         <a href="#" class="nav-link"><i class="fa-solid fa-basketball"></i> Sport</a>
                         <a href="#" class="nav-link"><i class="fa-solid fa-flask"></i> Science</a>
                         <a href="#" class="nav-link"><i class="fa-solid fa-heart-pulse"></i> Health</a>
@@ -47,7 +54,14 @@ const News = () => {
 
         <main className="news-section">
           <div className="headline">
-            <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=800" alt="Headline" />
+            <img src={techImg} alt="headline image " />
+            <h2 className="headline-title">
+              Lorem ipsum dolor sit amet consectetur, adipisicing elit. 
+              Repellat ratione ullam similique beatae eos quasi quam hic id.
+              <i className="fa-regular fa-bookmark bookmark"></i>
+
+            </h2>
+            <img src="{ nationImg}" alt="" />
             <h2 className="headline-title">Breaking: Major News Event Happening Now</h2>
             <div className="bookmark">
               <i className="fa-regular fa-bookmark"></i>
@@ -55,27 +69,27 @@ const News = () => {
           </div>
           <div className="news-grid">
             <div className="news-grid-item">
-              <img src="https://images.unsplash.com/photo-1495020689067-958852a7765e?w=400" alt="News" />
+              <img src="{sportsImg}" alt="" />
               <h3>Technology Update</h3>
             </div>
-            <div className="news-grid-item">
-              <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400" alt="News" />
+            {/* <div className="news-grid-item">
+              <img src={businessImg} alt="News" />
               <h3>Business News</h3>
-            </div>
+            </div> */}
             <div className="news-grid-item">
-              <img src="https://images.unsplash.com/photo-1546198632-9ef6368bef12?w=400" alt="News" />
+              <img src={sportsImg} alt="News" />
               <h3>Sports Update</h3>
             </div>
             <div className="news-grid-item">
-              <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?w=400" alt="News" />
+              <img src={healthImg} alt="News" />
               <h3>Health News</h3>
             </div>
             <div className="news-grid-item">
-              <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400" alt="News" />
+              <img src={scienceImg} alt="News" />
               <h3>Science Discovery</h3>
             </div>
             <div className="news-grid-item">
-              <img src="https://images.unsplash.com/photo-1444653389962-8149286c578a?w=400" alt="News" />
+              <img src={worldImg} alt="News" />
               <h3>World Events</h3>
             </div>
           </div>
