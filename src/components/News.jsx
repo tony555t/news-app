@@ -7,118 +7,125 @@ const News = () => {
   const [headline, setHeadline] = useState(null);
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activeCategory, setActiveCategory] = useState('general'); // Track active category
+
+  // Move fetchNews outside useEffect so it can be called from category clicks
+  const fetchNews = async (category = 'general') => {
+    setLoading(true);
+    try {
+      const apiKey = "b8a8d6918f0d2d580ad338bf7409299a";
+      
+      // Complete category mapping for GNews API
+      const categoryMapping = {
+        'general': 'general',
+        'world': 'world', 
+        'business': 'business',
+        'technology': 'technology',
+        'leisure': 'entertainment',
+        'sport': 'sports',
+        'science': 'science',
+        'health': 'health',
+        'nation': 'nation'
+      };
+
+      // Map the display category to API category
+      const apiCategory = categoryMapping[category];
+      
+      let url;
+      
+      if (!apiCategory) {
+        // For categories not supported by API (like bookmark), use general
+        url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en&country=us&max=10`;
+      } else if (apiCategory === 'general') {
+        // For general category, don't specify category parameter
+        url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en&country=us&max=10`;
+      } else {
+        // For specific categories
+        url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en&country=us&category=${apiCategory}&max=10`;
+      }
+
+      console.log(`Fetching ${category} news from URL:`, url);
+
+      const { data } = await axios.get(url);
+
+      if (data && data.articles && data.articles.length > 0) {
+        const formattedArticles = data.articles.map(article => ({
+          title: article.title,
+          image_url: article.image,
+          description: article.description,
+          url: article.url,
+          source: article.source.name,
+          publishedAt: article.publishedAt
+        }));
+        
+        setHeadline(formattedArticles[0].title);
+        setNews(formattedArticles);
+      } else {
+        // If no articles found, try alternative approach
+        console.log(`No ${category} articles found, trying search approach...`);
+        
+        // Alternative: Use search API for categories that might not work with top-headlines
+        const searchUrl = `https://gnews.io/api/v4/search?token=${apiKey}&q=${category}&lang=en&country=us&max=10`;
+        
+        const searchResponse = await axios.get(searchUrl);
+        
+        if (searchResponse.data && searchResponse.data.articles && searchResponse.data.articles.length > 0) {
+          const formattedArticles = searchResponse.data.articles.map(article => ({
+            title: article.title,
+            image_url: article.image,
+            description: article.description,
+            url: article.url,
+            source: article.source.name,
+            publishedAt: article.publishedAt
+          }));
+          
+          setHeadline(formattedArticles[0].title);
+          setNews(formattedArticles);
+        } else {
+          setNews([]);
+        }
+      }
+    } catch (error) {
+      console.error(`Error fetching ${category} news:`, error);
+      
+      // If category-specific request fails, try search as fallback
+      try {
+        console.log(`Trying search fallback for ${category}...`);
+        const fallbackUrl = `https://gnews.io/api/v4/search?token=${apiKey}&q=${category}&lang=en&max=10`;
+        const fallbackResponse = await axios.get(fallbackUrl);
+        
+        if (fallbackResponse.data && fallbackResponse.data.articles && fallbackResponse.data.articles.length > 0) {
+          const formattedArticles = fallbackResponse.data.articles.map(article => ({
+            title: article.title,
+            image_url: article.image,
+            description: article.description,
+            url: article.url,
+            source: article.source.name,
+            publishedAt: article.publishedAt
+          }));
+          
+          setHeadline(formattedArticles[0].title);
+          setNews(formattedArticles);
+        } else {
+          setNews([]);
+        }
+      } catch (fallbackError) {
+        console.error(`Fallback search also failed for ${category}:`, fallbackError);
+        setNews([]);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle category click
+  const handleCategoryClick = (category) => {
+    setActiveCategory(category);
+    fetchNews(category);
+  };
 
   useEffect(() => {
-   
-const fetchNews = async (category = 'general') => {
-  setLoading(true);
-  try {
-    const apiKey = "b8a8d6918f0d2d580ad338bf7409299a";
-    
-    // Complete category mapping for GNews API
-    const categoryMapping = {
-      'general': 'general',
-      'world': 'world', 
-      'business': 'business',
-      'technology': 'technology',
-      'leisure': 'entertainment',
-      'sport': 'sports',
-      'science': 'science',
-      'health': 'health',
-      'nation': 'nation'
-    };
-
-    // Map the display category to API category
-    const apiCategory = categoryMapping[category];
-    
-    let url;
-    
-    if (!apiCategory) {
-      // For categories not supported by API (like bookmark), use general
-      url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en&country=us&max=10`;
-    } else if (apiCategory === 'general') {
-      // For general category, don't specify category parameter
-      url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en&country=us&max=10`;
-    } else {
-      // For specific categories
-      url = `https://gnews.io/api/v4/top-headlines?token=${apiKey}&lang=en&country=us&category=${apiCategory}&max=10`;
-    }
-
-    console.log(`Fetching ${category} news from URL:`, url);
-
-    const { data } = await axios.get(url);
-
-    if (data && data.articles && data.articles.length > 0) {
-      const formattedArticles = data.articles.map(article => ({
-        title: article.title,
-        image_url: article.image,
-        description: article.description,
-        url: article.url,
-        source: article.source.name,
-        publishedAt: article.publishedAt
-      }));
-      
-      setHeadline(formattedArticles[0].title);
-      setNews(formattedArticles);
-    } else {
-      // If no articles found, try alternative approach
-      console.log(`No ${category} articles found, trying search approach...`);
-      
-      // Alternative: Use search API for categories that might not work with top-headlines
-      const searchUrl = `https://gnews.io/api/v4/search?token=${apiKey}&q=${category}&lang=en&country=us&max=10`;
-      
-      const searchResponse = await axios.get(searchUrl);
-      
-      if (searchResponse.data && searchResponse.data.articles && searchResponse.data.articles.length > 0) {
-        const formattedArticles = searchResponse.data.articles.map(article => ({
-          title: article.title,
-          image_url: article.image,
-          description: article.description,
-          url: article.url,
-          source: article.source.name,
-          publishedAt: article.publishedAt
-        }));
-        
-        setHeadline(formattedArticles[0].title);
-        setNews(formattedArticles);
-      } else {
-        setNews([]);
-      }
-    }
-  } catch (error) {
-    console.error(`Error fetching ${category} news:`, error);
-    
-    // If category-specific request fails, try search as fallback
-    try {
-      console.log(`Trying search fallback for ${category}...`);
-      const fallbackUrl = `https://gnews.io/api/v4/search?token=${apiKey}&q=${category}&lang=en&max=10`;
-      const fallbackResponse = await axios.get(fallbackUrl);
-      
-      if (fallbackResponse.data && fallbackResponse.data.articles && fallbackResponse.data.articles.length > 0) {
-        const formattedArticles = fallbackResponse.data.articles.map(article => ({
-          title: article.title,
-          image_url: article.image,
-          description: article.description,
-          url: article.url,
-          source: article.source.name,
-          publishedAt: article.publishedAt
-        }));
-        
-        setHeadline(formattedArticles[0].title);
-        setNews(formattedArticles);
-      } else {
-        setNews([]);
-      }
-    } catch (fallbackError) {
-      console.error(`Fallback search also failed for ${category}:`, fallbackError);
-      setNews([]);
-    }
-  } finally {
-    setLoading(false);
-  }
-};
-
-    fetchNews();
+    fetchNews('general'); // Load general news on initial mount
   }, []);
 
   if (loading) {
@@ -153,36 +160,66 @@ const fetchNews = async (category = 'general') => {
           <nav className="categories">
             <h1 className="nav-heading">Categories</h1>
             <div className="nav-links">
-              <a href="#" className="nav-link">
+              <button 
+                className={`nav-link ${activeCategory === 'general' ? 'active' : ''}`}
+                onClick={() => handleCategoryClick('general')}
+              >
                 <i className="fa-solid fa-globe"></i> General
-              </a>
-              <a href="#" className="nav-link">
+              </button>
+              <button 
+                className={`nav-link ${activeCategory === 'world' ? 'active' : ''}`}
+                onClick={() => handleCategoryClick('world')}
+              >
                 <i className="fa-solid fa-earth-americas"></i> World
-              </a>
-              <a href="#" className="nav-link">
+              </button>
+              <button 
+                className={`nav-link ${activeCategory === 'business' ? 'active' : ''}`}
+                onClick={() => handleCategoryClick('business')}
+              >
                 <i className="fa-solid fa-chart-line"></i> Business
-              </a>
-              <a href="#" className="nav-link">
-                <i className="fa-solid fa-microchip"></i> Technology
-              </a>
-              <a href="#" className="nav-link">
+              </button>
+              <button 
+                className={`nav-link ${activeCategory === 'technology' ? 'active' : ''}`}
+                onClick={() => handleCategoryClick('technology')}
+              >
+                <i className="fa-solid fa-microchip"></i> Tech
+              </button>
+              <button 
+                className={`nav-link ${activeCategory === 'leisure' ? 'active' : ''}`}
+                onClick={() => handleCategoryClick('leisure')}
+              >
                 <i className="fa-solid fa-film"></i> Leisure
-              </a>
-              <a href="#" className="nav-link">
+              </button>
+              <button 
+                className={`nav-link ${activeCategory === 'sport' ? 'active' : ''}`}
+                onClick={() => handleCategoryClick('sport')}
+              >
                 <i className="fa-solid fa-basketball"></i> Sport
-              </a>
-              <a href="#" className="nav-link">
+              </button>
+              <button 
+                className={`nav-link ${activeCategory === 'science' ? 'active' : ''}`}
+                onClick={() => handleCategoryClick('science')}
+              >
                 <i className="fa-solid fa-flask"></i> Science
-              </a>
-              <a href="#" className="nav-link">
+              </button>
+              <button 
+                className={`nav-link ${activeCategory === 'health' ? 'active' : ''}`}
+                onClick={() => handleCategoryClick('health')}
+              >
                 <i className="fa-solid fa-heart-pulse"></i> Health
-              </a>
-              <a href="#" className="nav-link">
+              </button>
+              <button 
+                className={`nav-link ${activeCategory === 'nation' ? 'active' : ''}`}
+                onClick={() => handleCategoryClick('nation')}
+              >
                 <i className="fa-solid fa-flag"></i> Nation
-              </a>
-              <a href="#" className="nav-link">
+              </button>
+              <button 
+                className={`nav-link ${activeCategory === 'bookmark' ? 'active' : ''}`}
+                onClick={() => handleCategoryClick('bookmark')}
+              >
                 <i className="fa-solid fa-bookmark"></i> Bookmark
-              </a>
+              </button>
             </div>
           </nav>
         </div>
