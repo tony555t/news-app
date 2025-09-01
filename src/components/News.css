@@ -293,6 +293,25 @@ nav-link.active {
   width: 100%;
   border-radius: 0 0 1rem 1rem;
 }
+.clear-search-btn {
+  background: none;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  margin-left: 8px;
+  padding: 4px;
+}
+
+.clear-search-btn:hover {
+  color: #333;
+}
+
+.search-info {
+  text-align: center;
+  margin-top: 10px;
+  color: #666;
+  font-size: 14px;
+}
 
 .my-blogs {
   width: clamp(20rem, 27cqi, 28%);
