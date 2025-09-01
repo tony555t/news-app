@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./News.css";
 import userImg from "../assets/images/user.jpg";
+import NewsModal from "./NewsModal";
 import axios from "axios";
 
 const News = () => {
@@ -333,6 +334,8 @@ const News = () => {
             ))}
           </div>
         </main>
+
+        <NewsModal/>
 
         {/* My Blogs Section (Static) */}
         <section className="my-blogs">
