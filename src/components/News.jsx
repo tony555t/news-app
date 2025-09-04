@@ -335,7 +335,7 @@ const News = () => {
           </div>
         </main>
 
-        <NewsModal/>
+        <NewsModal />
 
         {/* My Blogs Section (Static) */}
         <section className="my-blogs">
