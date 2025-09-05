@@ -12,6 +12,9 @@ const News = () => {
   const [searchInput, setSearchInput] = useState("");
   const [isSearchMode, setIsSearchMode] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const[showModal, setShowModal] = useState('false')
+  const[selectedArticle , setSelectedArticle] = useState('null')
+
 
   const apiKey = "b8a8d6918f0d2d580ad338bf7409299a";
 
@@ -197,6 +200,16 @@ const News = () => {
   if (news.length === 0) {
     return <p>Failed to load news. Please try again later.</p>;
   }
+  const handleArticle = (article)=>{
+    setSelectedArticle(article)
+    setShowModal(true)
+  }
+   
+
+
+
+
+
 
   return (
     <div className="news">
@@ -335,7 +348,9 @@ const News = () => {
           </div>
         </main>
 
-        <NewsModal />
+        <NewsModal show={showModal} 
+        article={selectedArticle}
+        onclose={()=> setShowModal(false)} />
 
         {/* My Blogs Section (Static) */}
         <section className="my-blogs">
