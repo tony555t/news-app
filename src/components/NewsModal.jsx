@@ -31,7 +31,7 @@ const NewsModal = ({show, article, onClose}) => {
           target="_blank" 
           rel="noopener noreferrer"
           className="read-more-link">
-          read more
+          Read more
         </a>
       </div>
     </div>
