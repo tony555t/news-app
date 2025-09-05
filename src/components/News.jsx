@@ -740,6 +740,7 @@ const News = () => {
           article={selectedArticle}
           onClose={() => setShowModal(false)} 
         />
+        <Bookmarks/>
 
         {/* My Blogs Section (Static) */}
         <section className="my-blogs">
