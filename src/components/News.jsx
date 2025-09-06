@@ -352,12 +352,15 @@ const News = () => {
               >
                 <i className="fa-solid fa-flag"></i> Nation
               </button>
-              <button 
-                className={`nav-link ${showBookmarksModal ? 'active' : ''}`}
-                onClick={() => handleCategoryClick('bookmark')}
-              >
-                <i className="fa-solid fa-bookmark"></i> Bookmark ({bookmarks.length})
-              </button>
+            
+<button 
+  className={`flex items-center gap-2 w-full p-4 text-left text-gray-300 hover:bg-purple-400/10 hover:text-purple-400 transition-all duration-300 whitespace-nowrap ${showBookmarksModal ? 'bg-purple-400 text-black' : ''}`}
+  onClick={() => handleCategoryClick('bookmark')}
+>
+  <i className="fa-solid fa-bookmark w-5 text-center flex-shrink-0"></i> 
+  Bookmark 
+  <span className="text-purple-400 font-medium ml-1">({bookmarks.length})</span>
+</button>
             </div>
           </nav>
         </div>
