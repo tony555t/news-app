@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import "./News.css";
 import userImg from "../assets/images/user.jpg";
 import NewsModal from "./NewsModal";
-import Bookmarks from "./Bookmarks"; // Make sure this import exists
+import Bookmarks from "./Bookmarks";
 import axios from "axios";
 
 const News = () => {
@@ -17,6 +17,7 @@ const News = () => {
   const [selectedArticle, setSelectedArticle] = useState(null);
   const [bookmarks, setBookmarks] = useState([]);
   const [showBookmarksModal, setShowBookmarksModal] = useState(false);
+  const [error, setError] = useState(null);
 
   const apiKey = "efa1b38a52ae4d789f762b532119276e";
 
@@ -28,10 +29,25 @@ const News = () => {
     }
   }, []);
 
-  const fetchNews = async (category = 'general') => {
+  // Add rate limiting and caching
+  const [lastFetchTime, setLastFetchTime] = useState({});
+  const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
+
+  const fetchNews = useCallback(async (category = 'general') => {
+    // Check cache to prevent excessive API calls
+    const cacheKey = `news_${category}`;
+    const lastFetch = lastFetchTime[cacheKey];
+    const now = Date.now();
+    
+    if (lastFetch && (now - lastFetch) < CACHE_DURATION) {
+      console.log(`Using cached data for ${category}`);
+      return;
+    }
+
     setLoading(true);
+    setError(null);
+    
     try {
-      // category mapping for NewsAPI
       const categoryMapping = {
         'general': 'general',
         'world': 'general', 
@@ -44,9 +60,7 @@ const News = () => {
         'nation': 'general'
       };
 
-      // Map the display category to API category
       const apiCategory = categoryMapping[category];
-      
       let url = `https://newsapi.org/v2/top-headlines?country=us&category=${apiCategory}&apiKey=${apiKey}&pageSize=10`;
 
       console.log(`Fetching ${category} news from URL:`, url);
@@ -68,24 +82,37 @@ const News = () => {
         
         setHeadline(formattedArticles[0].title);
         setNews(formattedArticles);
+        
+        // Update cache timestamp
+        setLastFetchTime(prev => ({
+          ...prev,
+          [cacheKey]: now
+        }));
       } else {
         setNews([]);
+        setHeadline("No news available");
       }
     } catch (error) {
       console.error(`Error fetching ${category} news:`, error);
       
-      // Check if it's a rate limit error
-      if (error.response && error.response.status === 429) {
-        console.log("Rate limit exceeded. Please wait before making more requests.");
-        setNews([]);
-        return;
+      if (error.response) {
+        if (error.response.status === 429) {
+          setError("Rate limit exceeded. Please wait before making more requests.");
+        } else if (error.response.status === 426) {
+          setError("API key limit reached. Please upgrade your plan or try again tomorrow.");
+        } else {
+          setError(`API Error: ${error.response.status}`);
+        }
+      } else {
+        setError("Network error. Please check your connection.");
       }
       
       setNews([]);
+      setHeadline("Failed to load news");
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiKey, lastFetchTime]);
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -94,6 +121,7 @@ const News = () => {
     setLoading(true);
     setIsSearchMode(true);
     setSearchQuery(searchInput);
+    setError(null);
     
     try {
       const searchUrl = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
@@ -126,7 +154,9 @@ const News = () => {
     } catch (error) {
       console.error("Error fetching search results:", error);
       if (error.response && error.response.status === 429) {
-        console.log("Rate limit exceeded for search. Please wait before searching again.");
+        setError("Rate limit exceeded for search. Please wait before searching again.");
+      } else {
+        setError("Search failed. Please try again.");
       }
       setNews([]);
       setHeadline(`Search failed for "${searchInput}"`);
@@ -140,9 +170,10 @@ const News = () => {
     setIsSearchMode(false);
     setSearchQuery("");
     setActiveCategory("general");
+    setError(null);
   };
 
-  // Handle category changes and bookmark viewing
+  // Fixed useEffect with proper dependencies
   useEffect(() => {
     if (!isSearchMode && activeCategory !== 'bookmark') {
       fetchNews(activeCategory);
@@ -151,9 +182,8 @@ const News = () => {
       setHeadline(bookmarks.length > 0 ? "Your Bookmarked Articles" : "No bookmarks yet");
       setLoading(false);
     }
-  }, [activeCategory, isSearchMode, bookmarks]);
+  }, [activeCategory, isSearchMode, fetchNews]); // Added fetchNews to dependencies
 
-  // Handle category click
   const handleCategoryClick = (category) => {
     if (isSearchMode) {
       clearSearch();
@@ -172,7 +202,7 @@ const News = () => {
   };
 
   const handleBookmarkClick = (e, article) => {
-    e.stopPropagation(); // Prevent triggering article click
+    e.stopPropagation();
     setBookmarks((prevBookmarks) => {
       const isBookmarked = prevBookmarks.find((bookmark) => bookmark.title === article.title);
       const updatedBookmarks = isBookmarked
@@ -196,12 +226,37 @@ const News = () => {
     return bookmarks.some((bookmark) => bookmark.title === article.title);
   };
 
+  // Improved image error handling
+  const handleImageError = (e) => {
+    e.target.src = 'https://placehold.co/400x300/e2e8f0/64748b?text=No+Image';
+  };
+
+  const handleHeadlineImageError = (e) => {
+    e.target.src = 'https://placehold.co/800x400/e2e8f0/64748b?text=No+Image';
+  };
+
   if (loading) {
     return <div className="loading">Loading news...</div>;
   }
 
+  if (error) {
+    return (
+      <div className="error">
+        <h2>Error Loading News</h2>
+        <p>{error}</p>
+        <button onClick={() => window.location.reload()}>Retry</button>
+      </div>
+    );
+  }
+
   if (news.length === 0 && activeCategory !== 'bookmark') {
-    return <div className="error">Failed to load news. Please try again later.</div>;
+    return (
+      <div className="error">
+        <h2>No News Available</h2>
+        <p>Failed to load news. Please try again later.</p>
+        <button onClick={() => fetchNews(activeCategory)}>Retry</button>
+      </div>
+    );
   }
 
   return (
@@ -308,7 +363,6 @@ const News = () => {
         </div>
 
         <main className="news-section">
-          {/* Show message for empty bookmarks */}
           {activeCategory === 'bookmark' && news.length === 0 ? (
             <div className="no-bookmarks">
               <h2>No bookmarked articles yet</h2>
@@ -321,9 +375,10 @@ const News = () => {
                 {news[0] && (
                   <>
                     <img
-                      src={news[0].image || "https://via.placeholder.com/800"}
+                      src={news[0].image || "https://placehold.co/800x400/e2e8f0/64748b?text=No+Image"}
                       alt="Headline"
                       style={{cursor:"pointer"}}
+                      onError={handleHeadlineImageError}
                     />
                     <div 
                       className="bookmark-icon"
@@ -341,8 +396,9 @@ const News = () => {
                 {news.slice(1, 10).map((item, index) => (
                   <div className="news-grid-item" key={index} onClick={() => handleArticleClick(item)}>
                     <img
-                      src={item.image || "https://via.placeholder.com/400"}
+                      src={item.image || "https://placehold.co/400x300/e2e8f0/64748b?text=No+Image"}
                       alt={item.title}
+                      onError={handleImageError}
                     />
                     <div 
                       className="bookmark-icon"
