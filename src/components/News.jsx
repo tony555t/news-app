@@ -3,6 +3,8 @@ import "./News.css";
 import userImg from "../assets/images/user.jpg";
 import NewsModal from "./NewsModal";
 import Bookmarks from "./Bookmarks";
+import BlogCreateModal from "./BlogCreateModal.jsx";
+import BlogsModal from "./BlogsModal";
 import axios from "axios";
 
 const News = () => {
@@ -19,15 +21,61 @@ const News = () => {
   const [showBookmarksModal, setShowBookmarksModal] = useState(false);
   const [error, setError] = useState(null);
 
+  // Blog state variables
+  const [blogs, setBlogs] = useState([]);
+  const [showBlogCreateModal, setShowBlogCreateModal] = useState(false);
+  const [showBlogModal, setShowBlogModal] = useState(false);
+  const [selectedBlog, setSelectedBlog] = useState(null);
+  const [editingBlog, setEditingBlog] = useState(null);
+
   const apiKey = "efa1b38a52ae4d789f762b532119276e";
 
-  // Load bookmarks from localStorage on component mount
+  // Load bookmarks and blogs from localStorage on component mount
   useEffect(() => {
     const savedBookmarks = localStorage.getItem('bookmarks');
     if (savedBookmarks) {
       setBookmarks(JSON.parse(savedBookmarks));
     }
+
+    const savedBlogs = localStorage.getItem('blogs');
+    if (savedBlogs) {
+      setBlogs(JSON.parse(savedBlogs));
+    }
   }, []);
+
+  // Blog functions
+  const handleCreateBlog = (newBlog) => {
+    const updatedBlogs = [newBlog, ...blogs];
+    setBlogs(updatedBlogs);
+    localStorage.setItem('blogs', JSON.stringify(updatedBlogs));
+  };
+
+  const handleEditBlog = (blog) => {
+    setEditingBlog(blog);
+    setShowBlogCreateModal(true);
+  };
+
+  const handleUpdateBlog = (updatedBlog) => {
+    const updatedBlogs = blogs.map(blog => 
+      blog.id === updatedBlog.id ? updatedBlog : blog
+    );
+    setBlogs(updatedBlogs);
+    localStorage.setItem('blogs', JSON.stringify(updatedBlogs));
+    setEditingBlog(null);
+  };
+
+  const handleDeleteBlog = (blogId) => {
+    if (window.confirm('Are you sure you want to delete this blog?')) {
+      const updatedBlogs = blogs.filter(blog => blog.id !== blogId);
+      setBlogs(updatedBlogs);
+      localStorage.setItem('blogs', JSON.stringify(updatedBlogs));
+    }
+  };
+
+  const handleBlogClick = (blog) => {
+    setSelectedBlog(blog);
+    setShowBlogModal(true);
+  };
 
   // Add rate limiting and caching
   const [lastFetchTime, setLastFetchTime] = useState({});
@@ -182,7 +230,7 @@ const News = () => {
       setHeadline(bookmarks.length > 0 ? "Your Bookmarked Articles" : "No bookmarks yet");
       setLoading(false);
     }
-  }, [activeCategory, isSearchMode, fetchNews]); // Added fetchNews to dependencies
+  }, [activeCategory, isSearchMode, fetchNews]);
 
   const handleCategoryClick = (category) => {
     if (isSearchMode) {
@@ -353,14 +401,14 @@ const News = () => {
                 <i className="fa-solid fa-flag"></i> Nation
               </button>
             
-<button 
-  className={`flex items-center gap-2 w-full p-4 text-left text-gray-300 hover:bg-purple-400/10 hover:text-purple-400 transition-all duration-300 whitespace-nowrap ${showBookmarksModal ? 'bg-purple-400 text-black' : ''}`}
-  onClick={() => handleCategoryClick('bookmark')}
->
-  <i className="fa-solid fa-bookmark w-5 text-center flex-shrink-0"></i> 
-  Bookmark 
-  <span className="text-purple-400 font-medium ml-1">({bookmarks.length})</span>
-</button>
+              <button 
+                className={`nav-link flex items-center gap-2 w-full whitespace-nowrap ${showBookmarksModal ? 'active' : ''}`}
+                onClick={() => handleCategoryClick('bookmark')}
+              >
+                <i className="fa-solid fa-bookmark"></i> 
+                BOOKMARK 
+                <span className="text-purple-400">({bookmarks.length})</span>
+              </button>
             </div>
           </nav>
         </div>
@@ -435,75 +483,158 @@ const News = () => {
           onDeleteBookmark={handleDeleteBookmark}
         />
 
-        {/* My Blogs Section (Static) */}
-        <section className="my-blogs">
-          <h2 className="my-blogs-heading">My Blogs</h2>
-          <div className="blog-posts">
-            <article className="blog-post">
-              <img
-                src="https://images.unsplash.com/photo-1432821596592-e2c18b78144f?w=400"
-                alt="Blog Post"
-              />
-              <h3>My Latest Thoughts</h3>
-              <div className="post-buttons">
-                <button>
-                  <i className="fa-solid fa-pen"></i>
-                </button>
-                <button>
-                  <i className="fa-solid fa-trash"></i>
-                </button>
-              </div>
-            </article>
+        {/* Blog Modals */}
+        <BlogCreateModal
+          show={showBlogCreateModal}
+          onClose={() => {
+            setShowBlogCreateModal(false);
+            setEditingBlog(null);
+          }}
+          onSubmit={editingBlog ? handleUpdateBlog : handleCreateBlog}
+          editingBlog={editingBlog}
+        />
 
-            <article className="blog-post">
-              <img
-                src="https://images.unsplash.com/photo-1486312338219-ce68e2c6b7dd?w=400"
-                alt="Blog Post"
-              />
-              <h3>Tech Review</h3>
-              <div className="post-buttons">
-                <button>
-                  <i className="fa-solid fa-pen"></i>
-                </button>
-                <button>
-                  <i className="fa-solid fa-trash"></i>
-                </button>
-              </div>
-            </article>
+        <BlogsModal
+          show={showBlogModal}
+          blog={selectedBlog}
+          onClose={() => {
+            setShowBlogModal(false);
+            setSelectedBlog(null);
+          }}
+        />
 
-            <article className="blog-post">
-              <img
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400"
-                alt="Blog Post"
-              />
-              <h3>Travel Stories</h3>
-              <div className="post-buttons">
-                <button>
-                  <i className="fa-solid fa-pen"></i>
-                </button>
-                <button>
-                  <i className="fa-solid fa-trash"></i>
-                </button>
-              </div>
-            </article>
+        {/* My Blogs Section - Now Dynamic */}
+        {/* My Blogs Section - Professional Tailwind Design */}
+<section className="pt-8 mt-16 border-t border-white/10">
+  
+  {/* Blog Header */}
+  <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-10 pb-4 border-b border-purple-400/20">
+    <div className="mb-6 md:mb-0">
+      <h2 className="text-4xl font-light text-white tracking-wide font-['Bebas_Neue'] mb-2">
+        My Blogs
+      </h2>
+      <p className="text-gray-400 text-lg">
+        Create and manage your personal blog posts
+      </p>
+    </div>
+    <button 
+      onClick={() => setShowBlogCreateModal(true)}
+      className="bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 px-6 py-3 rounded-xl text-white font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-500/25 flex items-center gap-2 w-fit"
+    >
+      <i className="fa-solid fa-plus"></i>
+      Create New Post
+    </button>
+  </div>
 
-            <article className="blog-post">
-              <img
-                src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400"
-                alt="Blog Post"
-              />
-              <h3>Food Adventures</h3>
-              <div className="post-buttons">
-                <button>
-                  <i className="fa-solid fa-pen"></i>
-                </button>
-                <button>
-                  <i className="fa-solid fa-trash"></i>
-                </button>
-              </div>
-            </article>
+  {/* Blog Stats */}
+  {blogs.length > 0 && (
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300">
+        <div className="text-3xl font-bold text-purple-400 mb-2">
+          {blogs.length}
+        </div>
+        <div className="text-sm text-gray-400 uppercase tracking-wider">
+          Posts
+        </div>
+      </div>
+      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300">
+        <div className="text-3xl font-bold text-purple-400 mb-2">
+          {blogs.reduce((total, blog) => total + Math.round(blog.content.split(' ').length), 0)}
+        </div>
+        <div className="text-sm text-gray-400 uppercase tracking-wider">
+          Words
+        </div>
+      </div>
+      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300">
+        <div className="text-3xl font-bold text-purple-400 mb-2">
+          {new Date(Math.max(...blogs.map(blog => new Date(blog.createdAt)))).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+        </div>
+        <div className="text-sm text-gray-400 uppercase tracking-wider">
+          Latest
+        </div>
+      </div>
+    </div>
+  )}
+  
+  {/* Blog Content */}
+  {blogs.length === 0 ? (
+    <div className="text-center py-16 px-8 bg-white/5 backdrop-blur-sm border-2 border-dashed border-purple-400/30 rounded-3xl">
+      <div className="max-w-md mx-auto">
+        <div className="w-20 h-20 bg-purple-400/20 rounded-full flex items-center justify-center mx-auto mb-6">
+          <i className="fa-solid fa-pen-to-square text-3xl text-purple-400"></i>
+        </div>
+        <h3 className="text-2xl font-semibold text-white mb-4">
+          No blog posts yet!
+        </h3>
+        <p className="text-gray-400 text-lg mb-8 leading-relaxed">
+          Start sharing your thoughts and ideas with the world. Create your first blog post to get started.
+        </p>
+        <button 
+          onClick={() => setShowBlogCreateModal(true)}
+          className="bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 px-8 py-4 rounded-2xl text-white font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-500/25 inline-flex items-center gap-3"
+        >
+          <i className="fa-solid fa-pen-to-square"></i>
+          Create Your First Post
+        </button>
+      </div>
+    </div>
+  ) : (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {blogs.map((blog) => (
+        <article 
+          key={blog.id} 
+          className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 hover:border-purple-400/30 hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl hover:shadow-black/20 group"
+        >
+          <div className="relative overflow-hidden">
+            <img
+              src={blog.image}
+              alt={blog.title}
+              onClick={() => handleBlogClick(blog)}
+              className="w-full h-48 object-cover cursor-pointer group-hover:scale-105 transition-transform duration-300"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </div>
-        </section>
+          
+          <div className="p-6">
+            <h3 
+              onClick={() => handleBlogClick(blog)}
+              className="text-xl font-semibold text-white mb-4 cursor-pointer hover:text-purple-400 transition-colors duration-300 line-clamp-2 leading-tight font-['Comfortaa']"
+            >
+              {blog.title}
+            </h3>
+            
+            <div className="flex justify-between items-center pt-4 border-t border-white/10">
+              <span className="text-sm text-gray-400">
+                {new Date(blog.createdAt).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'short',
+                  day: 'numeric'
+                })}
+              </span>
+              
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => handleEditBlog(blog)}
+                  className="w-9 h-9 rounded-lg bg-white/5 hover:bg-green-400/20 text-gray-400 hover:text-green-400 transition-all duration-300 hover:-translate-y-1 flex items-center justify-center group"
+                  title="Edit post"
+                >
+                  <i className="fa-solid fa-pen text-sm"></i>
+                </button>
+                <button 
+                  onClick={() => handleDeleteBlog(blog.id)}
+                  className="w-9 h-9 rounded-lg bg-white/5 hover:bg-red-400/20 text-gray-400 hover:text-red-400 transition-all duration-300 hover:-translate-y-1 flex items-center justify-center group"
+                  title="Delete post"
+                >
+                  <i className="fa-solid fa-trash text-sm"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  )}
+</section>
       </div>
 
       <footer className="news-footer">
