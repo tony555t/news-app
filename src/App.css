@@ -1,4 +1,4 @@
-/* Enhanced Categories Section Styles */
+
 .categories {
   width: 100%;
   height: calc(80% - 2rem);
@@ -83,7 +83,7 @@
   color: #4a9eff;
 }
 
-/* Specific icon colors */
+
 .nav-link:nth-child(1):hover i { color: #4a9eff; } /* General - Blue */
 .nav-link:nth-child(2):hover i { color: #52c41a; } /* World - Green */
 .nav-link:nth-child(3):hover i { color: #faad14; } /* Business - Orange */
@@ -95,7 +95,7 @@
 .nav-link:nth-child(9):hover i { color: #fa8c16; } /* Nation - Orange */
 .nav-link:nth-child(10):hover i { color: #ffd700; } /* Bookmark - Gold */
 
-/* Active/Selected state */
+
 .nav-link.active {
   background-color: #2a2d31;
   color: #fff;
@@ -153,7 +153,7 @@
 
   .nav-link {
     margin-right: 0; /* Remove individual margins */
-    font-size: 0.8rem; /* Even smaller for mobile */
+    font-size: 0.8rem; 
     font-weight: 300;
     color: #ddd;
     text-transform: uppercase;
@@ -225,13 +225,12 @@
   flex-direction: column;
   row-gap: 2rem;
   padding: 2rem;
-  overflow: hidden; /* Prevent overflow */
+  overflow: hidden; 
 }
 
-/* Adjust navbar width if needed */
 @media (min-width: 901px) {
   .navbar {
-    width: 20rem; /* Increase from 18rem to give more space */
+    width: 20rem; 
     height: 100%;
     display: flex;
     flex-direction: column;
