@@ -103,7 +103,7 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
               <h1>{editingBlog ? 'Edit Blog Post' : 'Create Blog Post'}</h1>
               
               <form onSubmit={handleSubmit}>
-                {/* Image Upload */}
+              
                 <label htmlFor="image-upload" className="file-upload">
                   <i className="fa-solid fa-image"></i>
                   <span>

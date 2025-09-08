@@ -157,7 +157,7 @@
 }
 .nav-link:hover {
   background-color: rgba(255, 255, 255, 0.1);
-  transform: translateX(5px); /* Slight slide effect */
+  transform: translateX(5px); 
 }
 
 
@@ -167,15 +167,15 @@
   border-radius: 1rem;
 }
 nav-link.active {
-  background-color: #007bff; /* Blue background */
+  background-color: #007bff; 
   color: white;
   font-weight: 500;
-  transform: translateX(8px); /* More pronounced slide */
-  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3); /* Glow effect */
+  transform: translateX(8px); 
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3); 
 }
 .nav-link.active:hover {
-  background-color: #0056b3; /* Darker blue on hover */
-  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4); /* Stronger glow */
+  background-color: #0056b3; 
+  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.4); 
 }
 .nav-link:focus {
   outline: 2px solid #007bff;
@@ -206,7 +206,7 @@ nav-link.active {
   border-radius: 0 0 1rem 1rem;
 }
 
-/* Bookmark icon for news grid items */
+
 .bookmark-icon {
   position: absolute;
   top: 1rem;
@@ -242,7 +242,6 @@ nav-link.active {
   opacity: 0.4;
 }
 
-/* Main news grid  */
 .news-grid {
   width: 100%;
   height: 50%;
@@ -262,7 +261,6 @@ nav-link.active {
   display: none;
 }
 
-/* Ensure grid items maintain proper sizing */
 .news-grid-item {
   width: 100%;
   height: 100%;

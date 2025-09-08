@@ -79,10 +79,10 @@ const News = () => {
 
   // Add rate limiting and caching
   const [lastFetchTime, setLastFetchTime] = useState({});
-  const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes cache
+  const CACHE_DURATION = 5 * 60 * 1000;
 
   const fetchNews = useCallback(async (category = 'general') => {
-    // Check cache to prevent excessive API calls
+  
     const cacheKey = `news_${category}`;
     const lastFetch = lastFetchTime[cacheKey];
     const now = Date.now();
@@ -130,8 +130,7 @@ const News = () => {
         
         setHeadline(formattedArticles[0].title);
         setNews(formattedArticles);
-        
-        // Update cache timestamp
+     
         setLastFetchTime(prev => ({
           ...prev,
           [cacheKey]: now
@@ -221,7 +220,6 @@ const News = () => {
     setError(null);
   };
 
-  // Fixed useEffect with proper dependencies
   useEffect(() => {
     if (!isSearchMode && activeCategory !== 'bookmark') {
       fetchNews(activeCategory);
@@ -274,7 +272,6 @@ const News = () => {
     return bookmarks.some((bookmark) => bookmark.title === article.title);
   };
 
-  // Improved image error handling
   const handleImageError = (e) => {
     e.target.src = 'https://placehold.co/400x300/e2e8f0/64748b?text=No+Image';
   };
@@ -421,7 +418,7 @@ const News = () => {
             </div>
           ) : (
             <>
-              {/* HEADLINE */}
+            
               <div className="headline" onClick={() => handleArticleClick(news[0])}>
                 {news[0] && (
                   <>
@@ -442,7 +439,7 @@ const News = () => {
                 )}
               </div>
 
-              {/* News Grid */}
+           
               <div className="news-grid">
                 {news.slice(1, 10).map((item, index) => (
                   <div className="news-grid-item" key={index} onClick={() => handleArticleClick(item)}>
@@ -465,7 +462,7 @@ const News = () => {
           )}
         </main>
 
-        {/* Modals */}
+       
         <NewsModal 
           show={showModal} 
           article={selectedArticle}
@@ -503,138 +500,118 @@ const News = () => {
           }}
         />
 
-        {/* My Blogs Section - Now Dynamic */}
-        {/* My Blogs Section - Professional Tailwind Design */}
-<section className="pt-8 mt-16 border-t border-white/10">
-  
-  {/* Blog Header */}
-  <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-10 pb-4 border-b border-purple-400/20">
-    <div className="mb-6 md:mb-0">
-      <h2 className="text-4xl font-light text-white tracking-wide font-['Bebas_Neue'] mb-2">
-        My Blogs
-      </h2>
-      <p className="text-gray-400 text-lg">
-        Create and manage your personal blog posts
-      </p>
+<div className="my-blogs">
+  {/* Blog Section Header */}
+  <div className="blog-section-header">
+    <div className={`blog-header-content ${blogs.length > 0 ? 'with-stats' : ''}`}>
+      <div className="blog-title-section">
+        <h2>My Blogs</h2>
+        <p className="blog-subtitle">Create and manage your personal blog posts</p>
+      </div>
+      
+      <div className="blog-actions">
+        <button 
+          onClick={() => setShowBlogCreateModal(true)}
+          className="create-blog-btn"
+        >
+          <i className="fa-solid fa-plus"></i>
+          Create New Post
+        </button>
+      </div>
     </div>
-    <button 
-      onClick={() => setShowBlogCreateModal(true)}
-      className="bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 px-6 py-3 rounded-xl text-white font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-purple-500/25 flex items-center gap-2 w-fit"
-    >
-      <i className="fa-solid fa-plus"></i>
-      Create New Post
-    </button>
+
+    {/* Blog Statistics - Only show when there are blogs */}
+    {blogs.length > 0 && (
+      <div className="blog-stats">
+        <div className="blog-stat-card">
+          <div className="blog-stat-number">{blogs.length}</div>
+          <div className="blog-stat-label">Posts</div>
+        </div>
+        <div className="blog-stat-card">
+          <div className="blog-stat-number">
+            {blogs.reduce((total, blog) => total + Math.round(blog.content.split(' ').length), 0)}
+          </div>
+          <div className="blog-stat-label">Words</div>
+        </div>
+        <div className="blog-stat-card">
+          <div className="blog-stat-number">
+            {new Date(Math.max(...blogs.map(blog => new Date(blog.createdAt)))).toLocaleDateString('en-US', { 
+              month: 'short', 
+              day: 'numeric' 
+            })}
+          </div>
+          <div className="blog-stat-label">Latest</div>
+        </div>
+      </div>
+    )}
   </div>
 
-  {/* Blog Stats */}
-  {blogs.length > 0 && (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300">
-        <div className="text-3xl font-bold text-purple-400 mb-2">
-          {blogs.length}
-        </div>
-        <div className="text-sm text-gray-400 uppercase tracking-wider">
-          Posts
-        </div>
-      </div>
-      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300">
-        <div className="text-3xl font-bold text-purple-400 mb-2">
-          {blogs.reduce((total, blog) => total + Math.round(blog.content.split(' ').length), 0)}
-        </div>
-        <div className="text-sm text-gray-400 uppercase tracking-wider">
-          Words
-        </div>
-      </div>
-      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 text-center hover:bg-white/10 transition-all duration-300">
-        <div className="text-3xl font-bold text-purple-400 mb-2">
-          {new Date(Math.max(...blogs.map(blog => new Date(blog.createdAt)))).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-        </div>
-        <div className="text-sm text-gray-400 uppercase tracking-wider">
-          Latest
-        </div>
-      </div>
-    </div>
-  )}
-  
-  {/* Blog Content */}
-  {blogs.length === 0 ? (
-    <div className="text-center py-16 px-8 bg-white/5 backdrop-blur-sm border-2 border-dashed border-purple-400/30 rounded-3xl">
-      <div className="max-w-md mx-auto">
-        <div className="w-20 h-20 bg-purple-400/20 rounded-full flex items-center justify-center mx-auto mb-6">
-          <i className="fa-solid fa-pen-to-square text-3xl text-purple-400"></i>
-        </div>
-        <h3 className="text-2xl font-semibold text-white mb-4">
-          No blog posts yet!
-        </h3>
-        <p className="text-gray-400 text-lg mb-8 leading-relaxed">
+  {/* Blog Posts Container */}
+  <div className="blog-posts-container">
+    {blogs.length === 0 ? (
+      /* Empty State */
+      <div className="empty-blog-state">
+        <div className="empty-state-icon">📝</div>
+        <h3 className="empty-state-title">No Blog Posts Yet!</h3>
+        <p className="empty-state-message">
           Start sharing your thoughts and ideas with the world. Create your first blog post to get started.
         </p>
         <button 
           onClick={() => setShowBlogCreateModal(true)}
-          className="bg-gradient-to-r from-purple-500 to-blue-600 hover:from-purple-600 hover:to-blue-700 px-8 py-4 rounded-2xl text-white font-semibold transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-500/25 inline-flex items-center gap-3"
+          className="create-first-post-btn"
         >
           <i className="fa-solid fa-pen-to-square"></i>
           Create Your First Post
         </button>
       </div>
-    </div>
-  ) : (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-      {blogs.map((blog) => (
-        <article 
-          key={blog.id} 
-          className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden hover:bg-white/10 hover:border-purple-400/30 hover:-translate-y-2 transition-all duration-300 hover:shadow-2xl hover:shadow-black/20 group"
-        >
-          <div className="relative overflow-hidden">
+    ) : (
+      /* Blog Posts Grid */
+      <div className="blog-posts">
+        {blogs.map((blog) => (
+          <div key={blog.id} className="blog-post">
             <img
               src={blog.image}
               alt={blog.title}
               onClick={() => handleBlogClick(blog)}
-              className="w-full h-48 object-cover cursor-pointer group-hover:scale-105 transition-transform duration-300"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          </div>
-          
-          <div className="p-6">
-            <h3 
-              onClick={() => handleBlogClick(blog)}
-              className="text-xl font-semibold text-white mb-4 cursor-pointer hover:text-purple-400 transition-colors duration-300 line-clamp-2 leading-tight font-['Comfortaa']"
-            >
-              {blog.title}
-            </h3>
             
-            <div className="flex justify-between items-center pt-4 border-t border-white/10">
-              <span className="text-sm text-gray-400">
-                {new Date(blog.createdAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'short',
-                  day: 'numeric'
-                })}
-              </span>
-              
-              <div className="flex gap-2">
-                <button 
-                  onClick={() => handleEditBlog(blog)}
-                  className="w-9 h-9 rounded-lg bg-white/5 hover:bg-green-400/20 text-gray-400 hover:text-green-400 transition-all duration-300 hover:-translate-y-1 flex items-center justify-center group"
-                  title="Edit post"
-                >
-                  <i className="fa-solid fa-pen text-sm"></i>
-                </button>
-                <button 
-                  onClick={() => handleDeleteBlog(blog.id)}
-                  className="w-9 h-9 rounded-lg bg-white/5 hover:bg-red-400/20 text-gray-400 hover:text-red-400 transition-all duration-300 hover:-translate-y-1 flex items-center justify-center group"
-                  title="Delete post"
-                >
-                  <i className="fa-solid fa-trash text-sm"></i>
-                </button>
+            <div className="post-buttons">
+              <button 
+                onClick={() => handleEditBlog(blog)}
+                className="edit-btn"
+                title="Edit post"
+              >
+                <i className="fa-solid fa-pen"></i>
+              </button>
+              <button 
+                onClick={() => handleDeleteBlog(blog.id)}
+                className="delete-btn"
+                title="Delete post"
+              >
+                <i className="fa-solid fa-trash"></i>
+              </button>
+            </div>
+            
+            <div className="blog-post-content">
+              <h3 onClick={() => handleBlogClick(blog)}>
+                {blog.title}
+              </h3>
+              <div className="blog-post-meta">
+                <span className="blog-post-date">
+                  {new Date(blog.createdAt).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric'
+                  })}
+                </span>
               </div>
             </div>
           </div>
-        </article>
-      ))}
-    </div>
-  )}
-</section>
+        ))}
+      </div>
+    )}
+  </div>
+</div>
       </div>
 
       <footer className="news-footer">
