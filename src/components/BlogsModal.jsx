@@ -123,14 +123,13 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
                   />
                 </label>
 
-                {/* Image Preview */}
                 {image && (
                   <div className="image-preview">
                     <img src={image} alt="Preview" />
                   </div>
                 )}
 
-                {/* Title Input */}
+              
                 <input
                   type="text"
                   className={`title-input ${errors.title ? 'invalid' : ''}`}
@@ -140,7 +139,6 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
                   maxLength={100}
                 />
 
-                {/* Content Input */}
                 <textarea
                   className={`text-input ${errors.content ? 'invalid' : ''}`}
                   placeholder="Share your thoughts and ideas..."
@@ -149,12 +147,11 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
                   rows={6}
                 />
 
-                {/* Character Count */}
+               
                 <div className="text-sm text-gray-400 text-right -mt-2">
                   {content.length} characters
                 </div>
 
-                {/* Submit Button */}
                 <button type="submit" className="submit-btn">
                   {editingBlog ? (
                     <>

@@ -1,5 +1,4 @@
 import React from "react";
-// import demoImg from '../assets/images/demo.jpg';
 import './NewsModal.css'
 import './Modal.css'
 

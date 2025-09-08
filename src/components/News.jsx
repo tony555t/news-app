@@ -21,7 +21,6 @@ const News = () => {
   const [showBookmarksModal, setShowBookmarksModal] = useState(false);
   const [error, setError] = useState(null);
 
-  // Blog state variables
   const [blogs, setBlogs] = useState([]);
   const [showBlogCreateModal, setShowBlogCreateModal] = useState(false);
   const [showBlogModal, setShowBlogModal] = useState(false);
@@ -30,7 +29,6 @@ const News = () => {
 
   const apiKey = "efa1b38a52ae4d789f762b532119276e";
 
-  // Load bookmarks and blogs from localStorage on component mount
   useEffect(() => {
     const savedBookmarks = localStorage.getItem('bookmarks');
     if (savedBookmarks) {
@@ -480,7 +478,7 @@ const News = () => {
           onDeleteBookmark={handleDeleteBookmark}
         />
 
-        {/* Blog Modals */}
+       
         <BlogCreateModal
           show={showBlogCreateModal}
           onClose={() => {
@@ -501,7 +499,7 @@ const News = () => {
         />
 
 <div className="my-blogs">
-  {/* Blog Section Header */}
+  
   <div className="blog-section-header">
     <div className={`blog-header-content ${blogs.length > 0 ? 'with-stats' : ''}`}>
       <div className="blog-title-section">
@@ -520,7 +518,7 @@ const News = () => {
       </div>
     </div>
 
-    {/* Blog Statistics - Only show when there are blogs */}
+   
     {blogs.length > 0 && (
       <div className="blog-stats">
         <div className="blog-stat-card">
@@ -546,10 +544,9 @@ const News = () => {
     )}
   </div>
 
-  {/* Blog Posts Container */}
   <div className="blog-posts-container">
     {blogs.length === 0 ? (
-      /* Empty State */
+     
       <div className="empty-blog-state">
         <div className="empty-state-icon">📝</div>
         <h3 className="empty-state-title">No Blog Posts Yet!</h3>
@@ -565,7 +562,6 @@ const News = () => {
         </button>
       </div>
     ) : (
-      /* Blog Posts Grid */
       <div className="blog-posts">
         {blogs.map((blog) => (
           <div key={blog.id} className="blog-post">
