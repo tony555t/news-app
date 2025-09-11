@@ -55,8 +55,9 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      zIndex: 9999,
-      padding: '20px'
+      zIndex: 10000,
+      padding: '20px',
+      boxSizing: 'border-box'
     }}>
       <div style={{
         backgroundColor: '#fff',
@@ -65,11 +66,23 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
         width: '100%',
         maxWidth: '500px',
         maxHeight: '90vh',
-        overflow: 'auto'
+        overflow: 'auto',
+        boxSizing: 'border-box',
+        boxShadow: '0 4px 20px rgba(0, 0, 0, 0.3)'
       }}>
         
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <h2 style={{ margin: 0, fontSize: '24px', color: '#333' }}>
+        <div style={{ 
+          display: 'flex', 
+          justifyContent: 'space-between', 
+          alignItems: 'center', 
+          marginBottom: '20px' 
+        }}>
+          <h2 style={{ 
+            margin: 0, 
+            fontSize: '24px', 
+            color: '#333',
+            fontWeight: '600'
+          }}>
             {editingBlog ? "Edit Blog" : "Create Blog"}
           </h2>
           <button
@@ -77,19 +90,34 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
             style={{
               background: 'none',
               border: 'none',
-              fontSize: '24px',
+              fontSize: '28px',
               cursor: 'pointer',
-              color: '#666'
+              color: '#666',
+              padding: '4px',
+              borderRadius: '4px',
+              width: '32px',
+              height: '32px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
             }}
+            onMouseOver={(e) => e.target.style.backgroundColor = '#f5f5f5'}
+            onMouseOut={(e) => e.target.style.backgroundColor = 'transparent'}
           >
             ×
           </button>
         </div>
 
-        <form onSubmit={handleSubmit}>
+        <div onSubmit={handleSubmit}>
           
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', color: '#333', fontWeight: '500' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '8px', 
+              color: '#333', 
+              fontWeight: '500',
+              fontSize: '14px'
+            }}>
               Cover Image
             </label>
             <input
@@ -100,7 +128,9 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
                 width: '100%',
                 padding: '8px',
                 border: '1px solid #ddd',
-                borderRadius: '4px'
+                borderRadius: '4px',
+                boxSizing: 'border-box',
+                fontSize: '14px'
               }}
             />
             {image && (
@@ -112,14 +142,21 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
                   height: '150px',
                   objectFit: 'cover',
                   marginTop: '10px',
-                  borderRadius: '4px'
+                  borderRadius: '4px',
+                  border: '1px solid #ddd'
                 }}
               />
             )}
           </div>
 
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', color: '#333', fontWeight: '500' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '8px', 
+              color: '#333', 
+              fontWeight: '500',
+              fontSize: '14px'
+            }}>
               Title
             </label>
             <input
@@ -133,13 +170,24 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
                 padding: '12px',
                 border: '1px solid #ddd',
                 borderRadius: '4px',
-                fontSize: '16px'
+                fontSize: '16px',
+                boxSizing: 'border-box',
+                outline: 'none',
+                transition: 'border-color 0.2s'
               }}
+              onFocus={(e) => e.target.style.borderColor = '#007bff'}
+              onBlur={(e) => e.target.style.borderColor = '#ddd'}
             />
           </div>
 
           <div style={{ marginBottom: '20px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', color: '#333', fontWeight: '500' }}>
+            <label style={{ 
+              display: 'block', 
+              marginBottom: '8px', 
+              color: '#333', 
+              fontWeight: '500',
+              fontSize: '14px'
+            }}>
               Content
             </label>
             <textarea
@@ -154,44 +202,70 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
                 border: '1px solid #ddd',
                 borderRadius: '4px',
                 fontSize: '16px',
-                resize: 'vertical'
+                resize: 'vertical',
+                boxSizing: 'border-box',
+                outline: 'none',
+                transition: 'border-color 0.2s',
+                fontFamily: 'inherit'
               }}
+              onFocus={(e) => e.target.style.borderColor = '#007bff'}
+              onBlur={(e) => e.target.style.borderColor = '#ddd'}
             />
           </div>
 
-          <div style={{ display: 'flex', gap: '10px' }}>
+          <div style={{ 
+            display: 'flex', 
+            gap: '12px',
+            marginTop: '30px'
+          }}>
             <button
               type="button"
               onClick={onClose}
               style={{
                 flex: 1,
-                padding: '12px',
+                padding: '12px 20px',
                 border: '1px solid #ddd',
                 borderRadius: '4px',
                 backgroundColor: '#f8f9fa',
                 cursor: 'pointer',
-                fontSize: '16px'
+                fontSize: '16px',
+                fontWeight: '500',
+                transition: 'all 0.2s',
+                color: '#495057'
+              }}
+              onMouseOver={(e) => {
+                e.target.style.backgroundColor = '#e9ecef';
+                e.target.style.borderColor = '#adb5bd';
+              }}
+              onMouseOut={(e) => {
+                e.target.style.backgroundColor = '#f8f9fa';
+                e.target.style.borderColor = '#ddd';
               }}
             >
               Cancel
             </button>
             <button
               type="submit"
+              onClick={handleSubmit}
               style={{
                 flex: 1,
-                padding: '12px',
+                padding: '12px 20px',
                 border: 'none',
                 borderRadius: '4px',
                 backgroundColor: '#007bff',
                 color: 'white',
                 cursor: 'pointer',
-                fontSize: '16px'
+                fontSize: '16px',
+                fontWeight: '500',
+                transition: 'background-color 0.2s'
               }}
+              onMouseOver={(e) => e.target.style.backgroundColor = '#0056b3'}
+              onMouseOut={(e) => e.target.style.backgroundColor = '#007bff'}
             >
               {editingBlog ? "Update" : "Publish"}
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
