@@ -15,15 +15,8 @@ const Bookmarks = ({ show, bookmarks = [], onClose, onSelectArticle, onDeleteBoo
                 </span>
                 
                 <h2 
-                    className="bookmarks-heading"
-                    style={{
-                        fontFamily: 'Bebas Neue, sans-serif',
-                        fontSize: '3rem',
-                        fontWeight: 300,
-                        color: '#ddd',
-                        letterSpacing: '0.1rem',
-                        marginBottom: '2rem'
-                    }}
+                    className="text-5xl font-light text-gray-300 tracking-wider mb-8"
+                    style={{ fontFamily: 'Bebas Neue, sans-serif' }}
                 >
                     Bookmark News
                 </h2>
@@ -33,87 +26,31 @@ const Bookmarks = ({ show, bookmarks = [], onClose, onSelectArticle, onDeleteBoo
                         <p>No bookmarked articles yet!</p>
                     </div>
                 ) : (
-                    <div 
-                        className="bookmarks-list"
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '1rem'
-                        }}
-                    >
+                    <div className="flex flex-col gap-4">
                         {bookmarks.map((article, index) => (
                             <div
-                                className="bookmark-item"
+                                className="flex items-center justify-start gap-6 cursor-pointer p-4 rounded-xl transition-colors duration-200 w-full hover:bg-white/5"
                                 key={index}
                                 onClick={() => onSelectArticle && onSelectArticle(article)}
-                                style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'flex-start',
-                                    gap: '1.5rem',
-                                    cursor: 'pointer',
-                                    padding: '1rem',
-                                    borderRadius: '0.8rem',
-                                    transition: 'background-color 0.2s ease',
-                                    width: '100%'
-                                }}
-                                onMouseEnter={(e) => {
-                                    e.target.style.backgroundColor = 'rgba(255, 255, 255, 0.05)'
-                                }}
-                                onMouseLeave={(e) => {
-                                    e.target.style.backgroundColor = 'transparent'
-                                }}
                             >
                                 <img
                                     src={article.image || demoImg}
                                     alt={article.title || 'Article'}
-                                    style={{
-                                        width: '7rem',
-                                        height: '7rem',
-                                        objectFit: 'cover',
-                                        borderRadius: '50%',
-                                        flexShrink: 0,
-                                        margin: 0
-                                    }}
+                                    className="w-28 h-28 object-cover rounded-full flex-shrink-0"
                                 />
                                 
                                 <h3
-                                    style={{
-                                        fontFamily: 'Comfortaa, sans-serif',
-                                        fontSize: '1.5rem',
-                                        fontWeight: 'bold',
-                                        color: '#fff',
-                                        flex: 1,
-                                        margin: 0,
-                                        lineHeight: 1.4,
-                                        textAlign: 'left'
-                                    }}
+                                    className="text-2xl font-bold text-white flex-1 m-0 leading-relaxed text-left"
+                                    style={{ fontFamily: 'Comfortaa, sans-serif' }}
                                 >
                                     {article.title || 'Untitled'}
                                 </h3>
                                 
                                 <span
-                                    className="delete-button"
+                                    className="text-4xl text-purple-300 cursor-pointer flex-shrink-0 p-2 rounded-full transition-all duration-200 hover:text-purple-400 hover:bg-purple-300/10"
                                     onClick={(e) => {
                                         e.stopPropagation()
                                         onDeleteBookmark && onDeleteBookmark(article)
-                                    }}
-                                    style={{
-                                        fontSize: '2.4rem',
-                                        color: '#b88efc',
-                                        cursor: 'pointer',
-                                        flexShrink: 0,
-                                        padding: '0.5rem',
-                                        borderRadius: '50%',
-                                        transition: 'color 0.2s ease, background-color 0.2s ease'
-                                    }}
-                                    onMouseEnter={(e) => {
-                                        e.target.style.color = '#a078f0'
-                                        e.target.style.backgroundColor = 'rgba(184, 142, 252, 0.1)'
-                                    }}
-                                    onMouseLeave={(e) => {
-                                        e.target.style.color = '#b88efc'
-                                        e.target.style.backgroundColor = 'transparent'
                                     }}
                                 >
                                     <i className="fa-regular fa-circle-xmark"></i>

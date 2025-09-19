@@ -3,5 +3,5 @@ import react from '@vitejs/plugin-react'
 
 export default defineConfig({
   plugins: [react()],
-  base: '/news-app/', // This is important for GitHub Pages
+  base: '/news-app/', 
 })

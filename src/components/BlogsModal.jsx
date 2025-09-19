@@ -21,17 +21,21 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
     return null;
   }
 
-  const handleImageUpload = (e) => {
+
+
+
+  const handleImageUpload = (e)=>{
     const file = e.target.files[0];
-    if (file) {
+    if(file){
       setImageFile(file);
       const reader = new FileReader();
-      reader.onload = (e) => {
+      reader.onload = (e)=>{
         setImage(e.target.result);
-      };
-      reader.readAsDataURL(file);
+
+      }
+      reader.readAsDataURL(file)
     }
-  };
+  }
 
   const validateForm = () => {
     const newErrors = {};

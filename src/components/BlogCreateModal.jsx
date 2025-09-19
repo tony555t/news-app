@@ -231,7 +231,7 @@ const BlogCreateModal = ({ show, onClose, onSubmit, editingBlog }) => {
                 fontSize: '16px',
                 fontWeight: '500',
                 transition: 'all 0.2s',
-                color: '#495057'
+                // color: '#495057'
               }}
               onMouseOver={(e) => {
                 e.target.style.backgroundColor = '#e9ecef';
